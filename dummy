@@ -1,0 +1,59 @@
+Submission date: 8th NOV 2023
+
+Project name: App Like Flipkart.
+
+Project Description:
+Create a web application that functions similarly to Flipkart, such as the User can add products to a cart, place an advance order at a particular time, check their order history, and cancel the order. Provides a user-friendly interface for users, vendors, and admins. This project should cover the following aspects:
+
+User:
+Implement user registration with OTP verification by email to allow users to save their details.
+can have multiple addresses.
+Allow users to create and update their profiles, including their addresses.
+User can also search for products.
+Users can have a cart, can add products to the cart based on product availability, can place instant and advance order, can cancel/modify the order(only theirs, not others)
+Can check their order history, can browse through all the products,
+Users can not add products to the product library(listing/DB), Users can not cancel/modify the order of other users,
+On order completion user should receive a mail.
+
+Vendor:
+Implement Vendor registration with OTP verification by email to allow vendors to save their details.
+Vendors can manage/modify the stocks, add the products to the product library, can delete/modify product details(only theirs)
+Vendors can not add products to the cart, and can not able to manage orders.
+Product:
+Should have a title, name, description, category, rating, image, quantity and price.
+Should have a listing with pagination.
+
+Admin:
+Can delete/modify any product.
+Can delete/modify any order.
+Can add products.
+Can block/unblock users and vendors.
+
+Background Jobs
+Use a background job processing system like Sidekiq or Resque to schedule and perform the advance order and update the product listing with the external API call.
+
+External API Integration:
+API => https://fakestoreapi.com/products
+get product list from the mentioned API and compare the current product listing(DB) with the products from the API, if any product is missing add it back in the listing in the background job.
+
+Unit test:
+Write unit test cases for the APIs and models, services, and jobs except admin.
+
+Gem that can be used
+For authentication
+JWT 
+Device
+For admin
+Active admin
+Rails admin
+For authorization
+CanCan
+Panit
+For  external api integration
+HTTTP Party
+Net HTTP
+
+All the response of the API’s must be rendered through serializer. Also use pagination.
+Create those routes only that are being used for API’s. Do not create extra and useless routes.
+Run rubocop on the code on daily basis.
+

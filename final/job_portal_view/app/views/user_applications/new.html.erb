@@ -1,0 +1,24 @@
+
+<html>
+  <head>
+    <style>
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Apply for job</h1>
+        <%= form_with model: @user_applications do |form| %>
+          <%= form.hidden_field :job_id, :value => @job.id %>
+          <label for="status">Status</label>
+          <%= form.text_field :status ,id: "status"%><br>
+        
+          <%= form.submit %><br>
+        <% end %>
+      <div class="back-link">
+        <%= link_to "Back to Jobs", user_applications_path %>
+      </div>
+    </div>
+  </body>
+</html>
+

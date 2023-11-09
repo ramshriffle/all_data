@@ -1,0 +1,72 @@
+<html>
+<head>
+<style>
+  
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F0F0F0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            padding: 20px;
+        }
+
+        form label {
+            font-weight: bold;
+        }
+
+        form input[type="text"],
+         form input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        form input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056B3;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+      .flash-notice {
+      color: red;
+    }
+</style>
+<body>
+  <div class="container">
+    <div class="flash-notice"><%= flash[:notice] %></div>
+    <%= form_with url: "/search_movie", method: :post do |form| %>
+      <label for="name">Name</label>
+      <%= form.text_field :name, id: "name" %><br><br>
+      <%= form.submit %><br>
+    <% end %>
+  </div>
+</body>
+
+</head>
+</html>

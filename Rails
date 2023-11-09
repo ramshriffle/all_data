@@ -1,0 +1,268 @@
+validation and callback
+delete and destroy
+update presence:true
+join and includes
+
+(first_name:'ram',last_name:'kushwah',email:'ram@gmail.com')
+
+Documents/model_d
+
+->You only need to specify the :counter_cache option on the belongs_to side of the association.
+
+->after_find is called before after_initialize if both are defined.
+
+Model Generate :
+
+rails generate model Address city:string
+rails g model College name:string address:references
+rails g model Course name:string college:references
+
+
+Course.joins(college: :address).where('addresses.city=?','indore')
+
+Address.includes(:colleges).where(colleges:{name:'upsc'})
+
+College.includes(:address).where(address:{city:'chennnai'})
+
+Address.joins(colleges: :courses).pluck("courses.name","addresses.id","addresses.city",
+"colleges.college_name","colleges.id")
+
+
+***include and preload=we can't use condition in preload like where condition
+
+***eager_load -->> eager loading loads all association in a single query using LEFT OUTER JOIN
+
+***This is exactly what includes does when it is forced to make a single query when where or order clause is using an attribute from posts table.
+
+
+***a=Address.first
+   a.colleges.first.courses 
+   
+***An enum lets you define an Array of values for an attribute and refer to them by name. 
+
+***Single Table Inheritance (STI) models are defined as separate classes inheriting from one base class, but they aren't associated with separate tables — they share one database table. The table contains a type column that defines which subclass an object belongs to
+
+  ***print only college name***
+  College.pluck(:name)
+  
+  column :image do |img|
+      image_tag url_for(img.image),size: "30x30"
+    end  
+  
+  form partial: 'form'
+  index do
+    selectable_column
+    id_column
+    column :f_name2
+    column :l_name
+    column :skills
+    column :experience
+    column :education
+    column :user_id
+    column :image
+    actions
+  end
+  filter :f_name
+
+
+  form do |f|
+    f.inputs do
+      f.input :f_name
+      f.input :l_name
+      f.input :skills
+      f.input :experience 
+      f.input :education
+      f.input :user_id 
+      f.input :image ,as: :file 
+    end
+    f.actions
+  end
+
+  show do
+    attributes_table do
+      row :f_namee 'POST create' do
+    let(:params) {{ }}
+    subject do
+      post :create, params: params
+    end
+  
+    context 'with valid params' do
+      # debugger
+      let(:params) { :user }
+      it 'creates user' do
+        expect(subject).to have_http_status(:ok)
+      end
+    end
+    context 'with invalid params' do
+      it 'returns not_found' do
+        expect(subject).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+      row :l_name
+      row :skills
+      row :education
+      row :user_id
+
+      row :image do |ad|
+        image_tag url_for(ad.image)
+      end
+    end
+  end
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  index do
+    selectable_column
+    id_column
+    column :status
+    column :job_id
+    column :user_id
+    column :resume
+    column :created_at
+    column :updated_at
+    actions
+  end
+  
+  filter :status
+  
+  form do |f|
+    f.inputs do
+      f.input :job_id
+      f.input :user_id
+      f.input :status
+
+      f.input :resume ,as: :file 
+    end
+    f.actions
+  end
+  
+  show do
+    attributes_table do
+      row :status
+      row :job_id
+      row :user_id
+      row :created_at
+      row :updated_at
+
+      row :resume do |ad|
+        image_tag url_for(ad.resume)
+      end
+    end
+  end
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ----->>>rspec
+  require 'rails_helper'
+include JsonWebToken
+RSpec.describe "Users", type: :request do
+   let!(:user) { FactoryBot.build(:user) }
+  let(:valid_jwt) { generate_valid_jwt(user) }
+  # Define a method to generate a valid JWT token for a user
+  def generate_valid_jwt(user)
+    payload = { user_id: user.id }
+    secret_key = Rails.application.secrets.secret_key_base
+    JWT.encode(payload, secret_key)
+  end
+  describe 'GET /users' do
+    it 'returns a list of users with valid JWT' do
+      user.save
+      get '/users', headers: { 'Authorization' => "Bearer #{valid_jwt}" }
+      expect(response).to have_http_status(:ok)
+    end
+  end
+  describe 'POST /users' do
+    it 'creates a new user' do
+      post '/users', params: { name: user.name,email: user.email,password: user.password, type: user.type }
+      expect(response).to have_http_status(:created)
+    end
+    it 'returns unprocessable entity with error messages' do
+      invalid_user_attributes = { name: 'John' } # Missing required email and password
+      post '/users', params: invalid_user_attributes.to_json
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
+  describe 'GET /profile' do
+    it 'show user profile' do
+      user.save
+      get '/profile',  headers: { 'Authorization' => "Bearer #{valid_jwt}" }
+      expect(response).to have_http_status(:ok)
+    end
+  end
+  describe 'PUT /profile' do
+    it "update user" do
+      user.save
+      put '/profile' , headers: { 'Authorization' => "Bearer #{valid_jwt}"},params: {name: "hariom",email: "hariom@123gmail.com",password: "1234567"}
+      expect(response).to have_http_status(:ok)
+    end
+    it 'returns unprocessable_entity without a valid JWT' do
+      user.save
+        put '/profile', params: {name: nil ,email: nil} , headers: { 'Authorization' => "Bearer #{valid_jwt}"}
+        expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
+  describe 'DELETE /profile' do
+    it 'it should destroy user account' do
+      user.save
+      delete '/profile', headers: { 'Authorization' => "Bearer #{valid_jwt}"}
+      expect(response).to have_http_status :ok
+    end
+  end
+  describe 'LOGIN /user/login' do
+    it 'login user' do
+      user.save
+      post '/users/login' ,params: { user_id:user.id, email: user.email, password: user.password}
+      expect(response).to have_http_status :ok
+    end
+     it 'returns unauthorized with invalid credentials' do
+      post '/users/login',params: { email: '123@gmail.com', password: nil }
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+  describe 'Forget password' do
+    it 'forgfot password' do
+      user.save
+      post '/users/forgot_password',params: {email: user.email}
+      expect(response).to have_http_status :ok
+    end
+    it 'not forgfot' do
+        post '/users/forgot_password',params: {email: nil}
+    end
+  end
+  describe 'reset' do
+    it 'reset password' do
+      user.save
+      reset_password_token = SecureRandom.hex(13)
+      reset_password_sent_at = Time.now
+      user.update(reset_password_token: reset_password_token, reset_password_sent_at: reset_password_sent_at)
+      post '/users/reset_password', params: {token: reset_password_token, email: user.email}
+      expect(response).to have_http_status :ok
+    end
+     it 'returns unauthorized with invalid credentials' do
+       post '/users/reset_password' ,params: {token: nil, email: user.email}
+      expect(response).to have_http_status :unprocessable_entity
+    end
+  end
+end
+
+
+
+

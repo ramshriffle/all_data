@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookMyShow - Movies</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('img_girl.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      color: #007bff;
+      text-align: center;
+      padding-top: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .movie-card {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .movie-details {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .movie-name {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .release-date {
+      color: #777;
+    }
+
+    .poster {
+      width: 200px;
+      height: 300px;
+      margin-right: 20px;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .actions {
+      margin-top: 10px;
+    }
+
+    .actions a {
+      text-decoration: none;
+      color: #007bff;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>All Movies</h1>
+  <div class="container">
+    <% @movies.each do |movie| %>
+      <div class="movie-card">
+        <img src="<%= movie.poster.attached? ? movie.poster.url : 'no_poster_available.jpg' %>" alt="<%= movie.name %>" class="poster">
+        <div class="movie-details">
+          <div class="movie-name"><%= movie.name %></div>
+          <div class="release-date">Release Date: <%= movie.release_date.strftime('%d-%m-%y') %></div>
+          <div class="actions">
+          <%if current_user.type=="Owner"%>
+            <%= link_to 'Show', movie %> |
+            <%= link_to "Create New Movie", new_movie_path %> |
+            <%= link_to "Book Ticket",movie_shows_path(movie)%>
+          <%else%>
+           <%= link_to "Book Ticket",movie_shows_path(movie)%>
+          <%end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</body>
+</html>

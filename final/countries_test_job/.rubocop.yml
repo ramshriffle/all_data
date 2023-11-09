@@ -1,0 +1,23 @@
+require:
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  DisabledByDefault: false
+  NewCops: enable
+  TargetRubyVersion: 2.6.3
+  Exclude:
+    - db/schema.rb
+    - node_modules/**/*
+    - vendor/**/*
+    - bin/**/*
+    - config/**/*
+    - Gemfile
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false

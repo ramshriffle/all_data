@@ -1,0 +1,126 @@
+User model test cases
+
+
+# it "is invalid without a name" do
+  #   @user.name = nil
+  #   expect(@user).to_not be_valid
+  #  end
+
+  # it "is invalid without a username" do
+  #   @user.username = nil
+  #   expect(@user).to_not be_valid
+  #  end
+ 
+  #  it "is invalid without a password" do
+  #   @user.password = nil
+  #    expect(@user).to_not be_valid
+  #   end
+   
+  #  it "is invalid without a email" do
+  #   @user.email = nil
+  #    expect(@user).to_not be_valid
+  #  end
+   
+  #  it "is invalid without a type" do 
+  #   @user.type = nil
+  #    expect(@user).to_not be_valid
+  #  end
+
+  #  it "is invalid without a mobile no" do
+  #   @user.mobile_no = nil
+  #   expect(@user).to_not be_valid
+  # end
+  
+  
+  
+  it "when email address is already taken" do
+    User.create(name: "example" , email: "example@gmail.com") 
+    check_new_user = "example@gmail.com"
+    result = User.find_by_email(check_new_user).present? ? false : true
+
+    expect(result).to be(true)
+    
+
+   #notice: this test will fails because check_new_user is already in the 
+            database. you can set emails according to yours.
+  end
+  
+  
+  
+  ..........Pagination .....https://github.com/eliotsykes/rspec-rails-examples/issues/77.............
+  
+  describe '.page(params[:page])' do
+    context 'when no enquiries' do
+      specify { expect(Enquiry.page(1)).to be_empty }
+    end
+
+    context 'with enquiries' do
+      let!(:enquiries) { create_list(:enquiry, 21) }
+      let(:first_page) { Enquiry.page(1) }
+      let(:second_page) { Enquiry.page(2) }
+
+      context 'when page is nil' do
+        it 'should return enquiries for page 1' do
+          expect(Enquiry.page(nil)).to eq(first_page)
+        end
+      end
+
+      context 'when page is blank' do
+        it 'should return enquiries for page 1' do
+          expect(Enquiry.page('')).to eq(first_page)
+        end
+      end
+
+      context 'when page is greater than number available' do
+        specify { expect(Enquiry.page(3)).to be_empty }
+      end
+
+      context 'on page 1' do
+        it 'should return enquiries for page 1' do
+          expect(Enquiry.page(1)).to eq(first_page)
+        end
+
+        it 'should not return enquiries for page 2' do
+          second_page.each do |enquiry|
+            expect(Enquiry.page(1)).not_to include(enquiry)
+          end
+        end
+      end
+
+      context 'on page 2' do
+        it 'should return enquiries for page 2' do
+          expect(Enquiry.page(2)).to eq(second_page)
+        end
+
+        it 'should not return enquiries for page 1' do
+          first_page.each do |enquiry|
+            expect(Enquiry.page(2)).not_to include(enquiry)
+          end
+        end
+      end
+    end
+  end
+  
+  
+  
+  
+  
+  
+  require 'rails_helper'
+
+RSpec.describe Customer, type: :model do
+  before(:all) do
+    @user = FactoryBot.create(:user)
+  end
+
+  describe 'Association' do
+    it { should have_many(:orders).with_foreign_key('user_id').dependent(:destroy) }
+    it { should have_many(:order_items).through(:orders).with_foreign_key('user_id').dependent(:destroy) }
+    it { should has_one(:cart).with_foreign_key('user_id').dependent(:destroy) }
+    it { should have_many(:cart_items).through(:cart).with_foreign_key('user_id').dependent(:destroy) }
+  end
+end
+  
+  
+  
+  -->>should_validate_numericality_of :amount, :greater_than_or_equal_to => 0

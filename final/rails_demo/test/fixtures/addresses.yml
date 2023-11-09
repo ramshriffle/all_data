@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  addressible_type: MyString
+  addressible_id: 1
+
+two:
+  addressible_type: MyString
+  addressible_id: 1

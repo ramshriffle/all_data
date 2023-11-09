@@ -1,0 +1,59 @@
+-->> CREATE NEW USER
+User.create(user_name:'ramkushwah', email:'ram123@gmail.com', password:'ram123', type:'JobRecruiter')
+
+-->> CREATE USER PROFILE
+u.create_user_profile!(f_name:'Ritik', l_name:'Dhote', skills:'python, ruby', experience:'fresher', education:'B.Tech')
+
+
+-->>CREATE JOB BY JOBRECRUITER ONLY
+u.jobs.create!(job_title:'junior software developer',description:'Knowledge of ruby and javascript', location: 'indore', salary:20000)
+
+
+
+
+
+
+-->>https://forum.upcase.com/t/enforcing-has-one-association-checking-before-def-new-method/4017
+
+before_filter :check_for_existing_profile, only: [:new, :create]
+
+private
+def check_for_existing_profile
+  if current_user.profile
+    redirect_to current_user.profile, notice: 'Some message about already having a profile'
+  end
+end
+
+
+
+
+config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_caching = false
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    user_name:            'ramkrishnak@shriffle.com',
+    password:             'ynjzmnwnnnogmglc',
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    # def up
+    #   User.where(reset_password_token: nil).update_all(reset_password_token: "1")
+    #   change_column :users, :reset_password_token,:string,:default=>'2'
+    #   change_column :users, :reset_password_token,:string,null: false 
+    # end
+    
+    # def down
+    #   change_column :users, :reset_password_token,:string, :default=>nil
+    #   change_column_null :users, :reset_password_token, true 
+    # end
+    authentication:       'plain',
+    enable_starttls_auto: true
+  }

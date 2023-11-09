@@ -1,0 +1,32 @@
+<style>
+  #search_box{
+    border: 1px solid;
+    width: 10rem;
+  }
+  #search_button{
+    margin: 0px 0px 0px 5px;
+  }
+  #form{
+    display: flex;
+    align-content: center;
+  }
+  #status_select{
+    margin: 0px 0px 0px 5px;
+  }
+</style>
+
+<div align="center">
+  <div style="display: inline-block">
+    <%= form_with url: locals[:path], method: :get, id: 'form' do |f| %>
+      <div>
+        <%= f.text_field :q, value: params[:q], placeholder: "search here...", id: 'search_box' %>
+      </div>
+      <% if locals[:is_show_status] %>
+        <div id="status_select">
+          <%= f.select :status, options_for_select(["all", "open", "close"], params[:status]) %>
+        </div>
+      <% end %>
+      <%= f.submit "Search", id: 'search_button' %>
+    <% end %>
+  </div>
+</div>
